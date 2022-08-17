@@ -1,0 +1,528 @@
+----------------------------------------------------------------------------Problem 1--------------------------------------------------------------------------------------------
+
+
+#include <iostream>     //docs faheem
+#include <string>
+using namespace std;
+class Node
+{
+    public:
+    int coeff;
+    char var;
+    int power;
+    Node* next;
+    Node()
+    {
+        coeff=0; 
+        var=' ';
+        power=0;
+        next=NULL;
+    }
+    Node(int coeff,char var,int power)
+    {
+        this->coeff=coeff; 
+        this->var=var;
+        this->power=power;
+        next=NULL;
+    }
+    
+};
+class LinkedList
+{
+    public:
+    static int count;
+    Node* head;
+    LinkedList()
+    {
+        head=NULL;
+    }
+    Node* CreateNode(int coeff,char var,int power)
+    {
+        Node* newNode=new Node(coeff,var,power);
+        return newNode;
+    }
+    bool isEmpty()
+    {
+        if(head==NULL)
+        return true;
+        return false;
+    }
+    void Append(int coeff,char var,int power)
+    {
+        Node* n=CreateNode(coeff,var,power);
+        if(isEmpty())
+        {
+            head=n;
+            return;
+        }
+        Node* temp=head;
+        while(temp->next!=NULL)
+        {
+            temp=temp->next;
+        }
+        temp->next=n;
+        
+    }
+    void AppendL3(Node* temp,Node* temp1)
+    {
+        count++;
+        Node* n=new Node();
+        n->coeff=(temp->coeff+temp1->coeff);
+        n->var=temp->var;
+        n->power=temp->power;
+        if(isEmpty())
+        {
+            head=n;
+            return;
+        }
+        Node* ptr=head;
+        while(ptr->next!=NULL)
+        {
+            ptr=ptr->next;
+        }
+        ptr->next=n;
+    }
+    void AppendL3Overload(Node* temp)
+    {
+        count++;
+        Node* n=new Node();
+        n->coeff=temp->coeff;
+        n->var=temp->var;
+        n->power=temp->power;
+        if(isEmpty())
+        {
+            head=n;
+            return;
+        }
+        Node* ptr=head;
+        while(ptr->next!=NULL)
+        {
+            ptr=ptr->next;
+        }
+        ptr->next=n;
+    }
+    void AddSum(LinkedList L1,LinkedList L2)
+    {
+        bool check=false;
+        if(L1.isEmpty() && L2.isEmpty())
+        {
+            return;
+        }
+        Node* temp=L1.head;
+        Node* temp1;
+        while(temp)
+        {
+            temp1=L2.head;
+            while(temp1)
+            {
+                if((temp->power==temp1->power) && (temp->var==temp1->var))
+                {
+                    check=true;
+                    AppendL3(temp,temp1);
+                }
+                temp1=temp1->next;
+            }
+            if(!check)
+            {
+                AppendL3Overload(temp);
+            }
+            check=false;
+            temp=temp->next;
+        }
+        temp=head;
+        temp1=L2.head;
+        while(temp1)
+        {
+            if(temp1->var!=temp->var)
+            AppendL3Overload(temp1);
+            temp=temp->next;
+            temp1=temp1->next;
+        }
+
+    }
+    void Sort()
+    {
+        if(isEmpty())
+        return;
+        Node* temp=head;
+        while(temp)
+        {
+            Node* temp1=temp->next;
+            while(temp1)
+            {
+                if(temp->power>temp1->power)
+                {
+                    int hold1=temp->coeff;
+                    temp->coeff=temp1->coeff;
+                    temp1->coeff=hold1;
+                    char hold2=temp->var;
+                    temp->var=temp1->var;
+                    temp1->var=hold2;
+                    int hold3=temp->power;
+                    temp->power=temp1->power;
+                    temp1->power=hold3;
+                    
+                }
+                if(temp->var>temp1->var)
+                {
+                    int hold1=temp->coeff;
+                    temp->coeff=temp1->coeff;
+                    temp1->coeff=hold1;
+                    char hold2=temp->var;
+                    temp->var=temp1->var;
+                    temp1->var=hold2;
+                    int hold3=temp->power;
+                    temp->power=temp1->power;
+                    temp1->power=hold3;
+                }
+                temp1=temp1->next;
+            }
+            temp=temp->next;
+        }
+    }
+    void Traverse()
+    {
+        if(isEmpty())
+        return;
+        cout<<count<<endl;
+        Node* temp=head;
+        while(temp)
+        {
+            cout<<temp->coeff<<" "<<temp->var<<" "<<temp->power<<endl;
+            temp=temp->next;
+        }
+    }
+    
+    
+};
+int LinkedList ::count=0;
+int main() {
+	// use standard input and output (no file i/o required)
+	// TODO: Your solution here
+	LinkedList L1;
+	LinkedList L2;
+    LinkedList L3;
+	int n;
+	cin>>n;
+    int coeff,power;
+    char var;
+	while(n)
+	{
+	    cin>>coeff;
+        cin>>var;
+        cin>>power;
+	    L1.Append(coeff,var,power);
+	    --n;
+	}
+	cin>>n;
+	while(n)
+	{
+        cin>>coeff;
+        cin>>var;
+        cin>>power;
+	    L2.Append(coeff,var,power);
+	    --n;	
+    }
+    L3.AddSum(L1,L2);
+    L3.Sort();
+    L3.Traverse();
+	return 0; // always return 0 from here
+}
+
+
+
+
+----------------------------------------------------------------------------Problem 2--------------------------------------------------------------------------------------------
+
+
+#include <iostream>     //docs faheem
+#include <string>
+using namespace std;
+class Node
+{
+    public:
+    string data;
+    Node* right;
+    Node* left;
+    Node()
+    {
+        data="";
+        right=NULL;
+        left=NULL;
+    }
+    Node(string data)
+    {
+        this->data=data;
+        right=NULL;
+        left=NULL;
+    }
+    
+};
+class LinkedList
+{
+    public:
+    Node* head;
+    LinkedList()
+    {
+        head=NULL;
+    }
+    Node* CreateNode(string data)
+    {
+        Node* newNode=new Node(data);
+        return newNode;
+    }
+    bool isEmpty()
+    {
+        if(head==NULL)
+        return true;
+        return false;
+    }
+    void Append(string data)
+    {
+        Node* n=CreateNode(data);
+        if(isEmpty())
+        {
+            head=n;
+            return;
+        }
+        Node* temp=head;
+        while(temp->right!=NULL)
+        {
+            temp=temp->right;
+        }
+        temp->right=n;
+        n->left=temp;
+    }
+    void RemoveDuplicates()
+    {
+        Node* temp=head;
+        while(temp)
+        {
+            Node* temp1=temp->right;
+            while(temp1)
+            {
+                if(temp->right)
+                {
+                    if(temp->data==temp1->data)
+                    {
+                        temp->left->right=temp->right;
+                        temp->right->left=temp->left;
+                    }
+                }
+                temp1=temp1->right;
+            }
+            temp=temp->right;
+        }
+
+    }
+    void Sort()
+    {
+        Node* temp=head;
+        bool f1=false;
+        bool f2=false;
+        while(temp)
+        {
+            Node* temp1=temp->right;
+            while(temp1)
+            {
+                if(temp->data[0]>=65 && temp->data[0]<=90)
+                {
+                    temp->data[0]=temp->data[0]+32;
+                    f1=true;
+                }
+                if(temp1->data[0]>=65 && temp1->data[0]<=90)
+                {
+                    temp1->data[0]=temp1->data[0]+32;
+                    f2=true;
+                }
+                if(temp->data>temp1->data)
+                {
+                    if(f1)
+                    {
+                        temp->data[0]=temp->data[0]-32;
+                        f1=false;
+                    }
+                    if(f2)
+                    {
+                        temp1->data[0]=temp1->data[0]-32;
+                        f2=false;
+                    }
+                    string hold=temp->data;
+                    temp->data=temp1->data;
+                    temp1->data=hold;
+                }
+                if(f1)
+                {
+                    temp->data[0]=temp->data[0]-32;
+                    f1=false;
+                }
+                if(f2)
+                {
+                    temp1->data[0]=temp1->data[0]-32;
+                    f2=false;
+                }
+                temp1=temp1->right;
+            }
+            temp=temp->right;
+        }
+
+    }
+    void Traverse()
+    {
+        if(isEmpty())
+        return;
+        Node* temp=head;
+        while(temp)
+        {
+            cout<<temp->data<<endl;
+            temp=temp->right;
+        }
+    }
+};
+int main()
+{
+    LinkedList L1;
+    string input,temp;
+    fflush(stdin);
+    getline(cin,input);
+    int i=0;
+    while(1)
+    {
+        if(input[i]==' ' || input[i]=='\0')
+        {
+            L1.Append(temp);
+            temp="";
+            if(input[i]=='\0')
+            break;
+        }
+        else
+        temp+=input[i];
+        i++;
+    }
+    L1.RemoveDuplicates();
+    L1.Sort();
+    L1.Traverse();
+
+
+   
+   return 0;
+}
+
+
+
+
+----------------------------------------------------------------------------Problem 3--------------------------------------------------------------------------------------------
+
+
+
+#include <iostream>     //docs faheem
+#include <string>
+using namespace std;
+class Node
+{
+    public:
+    string process;
+    int time,quota;
+    Node* next;
+    Node()
+    {
+        process="";
+        time=quota=0;
+        next=NULL;
+    }
+    Node(string process,int time,int quota)
+    {
+        this->process=process;
+        this->time=time;
+        this->quota=quota;
+        next=NULL;
+    }
+    
+};
+class CircularLinkedList
+{
+    public:
+    static int len;
+    Node* head;
+    CircularLinkedList()
+    {
+        head=NULL;
+    }
+    Node* CreateNode(string process,int time,int quota)
+    {
+        Node* newNode=new Node(process,time,quota);
+        return newNode;
+    }
+    bool isEmpty()
+    {
+        if(head==NULL)
+        return true;
+        return false;
+    }
+    void Append(string process,int time,int quota)
+    {
+        len++;
+        Node* n=CreateNode(process,time,quota);
+        if(isEmpty())
+        {
+            head=n;
+            n->next=head;
+            return;
+        }
+        Node* temp=head;
+        while(temp->next!=head)
+        {
+            temp=temp->next;
+        }
+        temp->next=n;
+        n->next=head;
+    }
+    void Processing()
+    {
+        Node* temp=head;
+        while(len)
+        {
+            if(temp->time>0)
+            {
+                cout<<temp->process<<endl;
+                temp->time-=temp->quota;
+            }
+            else
+            {
+            	temp=temp->next;
+            	continue;
+			}
+            if(temp->time==0)
+            len--;
+            temp=temp->next;
+        }
+    }
+};
+int CircularLinkedList::len=0;
+int main()
+{
+    CircularLinkedList L1;
+    string process,temp;
+    int time,quota;
+    int num;
+    cin>>num;
+    while(num!=0)
+    {
+        fflush(stdin);
+        cin>>process;
+        cin>>time;
+        cin>>quota;
+        L1.Append(process,time,quota);
+        --num;
+    }
+    L1.Processing();
+
+// 3
+// P1 12 3
+// P2 6 6
+// P3 6 2
+   
+   return 0;
+}
+
+
